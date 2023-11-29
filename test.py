@@ -170,7 +170,9 @@ def test(args, test_list, model_list, net_input_shape):
             
             # Change RGB to single slice of grayscale image for MS COCO 17 dataset.
             if args.dataset == 'mscoco17':
-                img_data = convert_img_data(img_data, 3)
+                # img_data = convert_img_data(img_data, 3)
+                img_data = img_data.reshape([1, img_data.shape[0], img_data.shape[1]])
+
 
             num_slices = 1               
             logging.info('\ntest.test: eval_model.predict_generator')
@@ -221,7 +223,7 @@ def test(args, test_list, model_list, net_input_shape):
             
             # Change RGB to single slice of grayscale image for MS COCO 17 dataset.
             if args.dataset == 'mscoco17':
-                gt_data = convert_mask_data(gt_data)
+                # gt_data = convert_mask_data(gt_data)
                 # Reshape numpy from 2 to 3 dimensions (slices, heigh, width)
                 gt_data = gt_data.reshape([1, gt_data.shape[0], gt_data.shape[1]])
 
@@ -229,36 +231,32 @@ def test(args, test_list, model_list, net_input_shape):
             print('Creating Qualitative Figure for Quick Reference')
             f, ax = plt.subplots(1, 3, figsize=(15, 5))
             
-            if args.dataset == 'mscoco17':               
-                pass
-            else: # 3D data
-                ax[0].imshow(img_data[img_data.shape[0] // 3, :, :], alpha=1, cmap='gray')
-                ax[0].imshow(output_bin[img_data.shape[0] // 3, :, :], alpha=0.5, cmap='Blues')
-                ax[0].imshow(gt_data[img_data.shape[0] // 3, :, :], alpha=0.2, cmap='Reds')
-                ax[0].set_title('Slice {}/{}'.format(img_data.shape[0] // 3, img_data.shape[0]))
-                ax[0].axis('off')
-    
-                ax[1].imshow(img_data[img_data.shape[0] // 2, :, :], alpha=1, cmap='gray')
-                ax[1].imshow(output_bin[img_data.shape[0] // 2, :, :], alpha=0.5, cmap='Blues')
-                ax[1].imshow(gt_data[img_data.shape[0] // 2, :, :], alpha=0.2, cmap='Reds')
-                ax[1].set_title('Slice {}/{}'.format(img_data.shape[0] // 2, img_data.shape[0]))
-                ax[1].axis('off')
-    
-                ax[2].imshow(img_data[img_data.shape[0] // 2 + img_data.shape[0] // 4, :, :], alpha=1, cmap='gray')
-                ax[2].imshow(output_bin[img_data.shape[0] // 2 + img_data.shape[0] // 4, :, :], alpha=0.5,
-                             cmap='Blues')
-                ax[2].imshow(gt_data[img_data.shape[0] // 2 + img_data.shape[0] // 4, :, :], alpha=0.2,
-                             cmap='Reds')
-                ax[2].set_title(
-                    'Slice {}/{}'.format(img_data.shape[0] // 2 + img_data.shape[0] // 4, img_data.shape[0]))
-                ax[2].axis('off')
+            # ax[0].imshow(img_data[img_data.shape[0] // 3, :, :], alpha=1, cmap='gray')
+            ax[0].imshow(output_bin[img_data.shape[0] // 3, :, :], alpha=0.5, cmap='Blues')
+            ax[0].imshow(gt_data[img_data.shape[0] // 3, :, :], alpha=0.2, cmap='Reds')
+            ax[0].set_title('compound image')
+            ax[0].axis('off')
 
-                fig = plt.gcf()
-                fig.suptitle(img[0][:-4])
-    
-                plt.savefig(join(fig_out_dir, img[0][:-4] + '_qual_fig' + '.png'),
-                            format='png', bbox_inches='tight')
-                plt.close('all')   
+            # ax[1].imshow(img_data[img_data.shape[0] // 2, :, :], alpha=1, cmap='gray')
+            ax[1].imshow(output_bin[img_data.shape[0] // 2, :, :], alpha=0.5, cmap='Blues')
+            # ax[1].imshow(gt_data[img_data.shape[0] // 2, :, :], alpha=0.2, cmap='Reds')
+            ax[1].set_title('generated mask')
+            ax[1].axis('off')
+
+            # ax[2].imshow(img_data[img_data.shape[0] // 2 + img_data.shape[0] // 4, :, :], alpha=1, cmap='gray')
+            # ax[2].imshow(output_bin[img_data.shape[0] // 2 + img_data.shape[0] // 4, :, :], alpha=0.5,
+            #                cmap='Blues')
+            ax[2].imshow(gt_data[img_data.shape[0] // 2 + img_data.shape[0] // 4, :, :], alpha=0.2,
+                            cmap='Reds')
+            ax[2].set_title('gt mask')
+            ax[2].axis('off')
+
+            fig = plt.gcf()
+            fig.suptitle(img[0][:-4])
+
+            plt.savefig(join(fig_out_dir, img[0][:-4] + '_qual_fig' + '.png'),
+                        format='png', bbox_inches='tight')
+            plt.close('all')   
 
             # Compute metrics
             row = [img[0][:-4]]

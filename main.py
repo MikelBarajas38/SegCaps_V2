@@ -81,6 +81,7 @@ def main(args):
     # Get image shape from the first image.
     image = sitk.GetArrayFromImage(sitk.ReadImage(join(args.data_root_dir, 'imgs', train_list[0][0])))
     img_shape = image.shape # # (x, y, channels)
+
     if args.dataset == 'luna16':
         net_input_shape = (img_shape[1], img_shape[2], args.slices)    
     else:
@@ -92,6 +93,7 @@ def main(args):
     # Create the model for training/testing/manipulation
     # enable_decoder = False only for SegCaps R3 to disable recognition image output on evaluation model 
     # to speed up performance.
+
     model_list = create_model(args=args, input_shape=net_input_shape, enable_decoder=True)
     print_summary(model=model_list[0], positions=[.38, .65, .75, 1.])
 

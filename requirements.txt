@@ -5,14 +5,19 @@ tqdm
 scikit-learn
 scikit-image
 pillow
-SimpleITK
-keras
-h5py
+SimpleITK==2.2.1
+keras==2.1.6
+h5py==2.10.0
 
 # Depends on your environment.
-tensorflow
+tensorflow==1.15.0
 # tensorflow-gpu
 
 # Below section
 opencv-python
 pycocotools
+protobuf==3.20.*
+pydicom
+GDCM
+pylibjpeg
+pylibjpeg-libjpeg

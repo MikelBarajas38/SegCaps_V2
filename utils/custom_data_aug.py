@@ -236,6 +236,7 @@ def convert_mask_data(mask, resolution = RESOLUTION, from_background_color = COC
     mask = image_resize2square(mask, resolution)
      
     mask = change_background_color(mask, from_background_color, to_background_color) 
+
     if GRAYSCALE == True:      
         # Only need one channel for black and white      
         mask = mask[:,:,:1]
@@ -247,7 +248,8 @@ def convert_mask_data(mask, resolution = RESOLUTION, from_background_color = COC
     mask = mask.astype(np.uint8)
     return mask
     
-def convert_img_data(img, dims = 4, resolution = RESOLUTION):
+def convert_img_data(img, dims = 3, resolution = RESOLUTION):
+    
     '''
     Convert image data by 
     1. Shift RGB channel with value 1 to avoid pure black color.
@@ -256,12 +258,14 @@ def convert_img_data(img, dims = 4, resolution = RESOLUTION):
     4. reshape to require dimension 3 or 4 
     '''
     img = img[:,:,:3]
+
     if GRAYSCALE == True:
         # Add 1 for each pixel and change resolution on the image.
         img = process_image(img, shift = 1, resolution = resolution)
                     
         # Translate the image to 24bits grayscale by PILLOW package
         img = image2float_array(img, 16777216-1)  #2^24=16777216
+
         if dims == 3:
             # Reshape numpy from 2 to 3 dimensions
             img = img.reshape([img.shape[0], img.shape[1], 1])
@@ -275,6 +279,7 @@ def convert_img_data(img, dims = 4, resolution = RESOLUTION):
             img = img[:,:,:3]
         else: # dimensions = 4
             img = img[:,:,:,:3]
+
     return img
     
     

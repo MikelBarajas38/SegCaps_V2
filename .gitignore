@@ -89,6 +89,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+myenv/
 
 # Spyder project settings
 .spyderproject
@@ -117,3 +118,4 @@ data/np_files/
 data/plots/
 data/results/
 reference/
+data*

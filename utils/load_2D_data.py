@@ -74,6 +74,7 @@ def convert_data_to_numpy(root_path, img_name, no_masks=False, overwrite=False):
 
     try:       
         img = np.array(Image.open(join(img_path, img_name)))
+
         # Conver image to 3 dimensions
         img = convert_img_data(img, 3)
             
